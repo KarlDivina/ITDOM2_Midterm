@@ -156,8 +156,6 @@
         "F0" => "clear_order",
     );
 
-    $_SESSION['TOTAL_PRICE'] = 0;
-    $_SESSION['CURRENT_ORDER'] = array();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -194,9 +192,9 @@
                                 method="post"
                                 action="orderReciept.php"
                             >
-                            <li class="nav-item">
-                            <input type="submit" class="nav-link" name="finish_order" value="Cart"/>
-                            </li>
+                                <li class="nav-item">
+                                    <input type="submit" class="nav-link" name="finish_order" value="Cart"/>
+                                </li>
                             </form>
                             <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="#">Take a break and have a McDonald's merienda! I'm lovin' it!</a>
@@ -248,6 +246,55 @@
                         </div>
                     </form>"
                     );
+                }
+
+                // if ($_SERVER["REQUEST_METHOD"] == "POST"){
+                //     if (!empty($_POST[$_SESSION['FUNCTIONS']["F1"]])){
+                //         $newItem = $_POST[$_SESSION['FUNCTIONS']["F1"]];
+                //         if (array_key_exists($_SESSION['FUNCTIONS']["F1"], $_POST)){
+                //             addItem($newItem);
+                //         }
+                //     }
+                // }
+
+                if ($_SERVER["REQUEST_METHOD"] == "POST"){
+                    if (empty($_POST[$_SESSION['FUNCTIONS']["F1"]])){
+                        if (empty($_POST[$_SESSION['FUNCTIONS']["F2"]])){
+                            if (empty($_POST[$_SESSION['FUNCTIONS']["F3"]])){
+                                clearOrder();
+                            }
+                        } else {
+                            removeItem();
+                        }
+                    } else {
+                        $newItem = $_POST[$_SESSION['FUNCTIONS']["F1"]];
+                        if (array_key_exists($_SESSION['FUNCTIONS']["F1"], $_POST)){
+                            addItem($newItem);
+                        }
+                    }
+                }
+
+                function addItem($addValue){
+                    array_push($_SESSION['CURRENT_ORDER'], $addValue);
+                    calculateTotal();
+                }
+
+                function calculateTotal(){
+                    $orderValue = $_SESSION['CURRENT_ORDER'];
+                    $MENU_ITEMS = $_SESSION['MENU_ITEMS'];
+                    $arrLength = count($orderValue);
+                    $TOTAL_PRICE = 0;
+                    for($x = 0; $x < $arrLength; $x++){
+                        $itemPrice = $MENU_ITEMS[$orderValue[$x]]['price'];
+                        $TOTAL_PRICE += $itemPrice;
+                    }
+                    $_SESSION['TOTAL_PRICE'] = $TOTAL_PRICE;
+                }
+
+                function clearOrder(){
+                    if(isset($_SESSION['CURRENT_ORDER'])){
+                        unset($_SESSION['CURRENT_ORDER']);
+                    }
                 }
 
                 function getName($item){
