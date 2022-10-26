@@ -97,8 +97,13 @@
         }
 
         function finishOrder(){
-            $orderValue = $_SESSION['CURRENT_ORDER'];
-            printArray($orderValue);
+            if(!empty($_SESSION['CURRENT_ORDER'])){
+                $orderValue = $_SESSION['CURRENT_ORDER'];
+                printArray($orderValue);
+                calculateTotal();
+            } else {
+                echo("<h4> Cart is still empty... Add some items! </h4>");
+            }
         }
 
         function printArray($Array){
@@ -114,15 +119,26 @@
             }
             echo "<br>";
         }  
-        function calculateTotal($itemPrice){
-            $TOTAL_PRICE = $_SESSION['TOTAL_PRICE'];
-            $TOTAL_PRICE += $itemPrice;
+
+        function calculateTotal(){
+            $orderValue = $_SESSION['CURRENT_ORDER'];
+            $MENU_ITEMS = $_SESSION['MENU_ITEMS'];
+            $arrLength = count($orderValue);
+            $TOTAL_PRICE = 0;
+            for($x = 0; $x < $arrLength; $x++){
+                $itemPrice = $MENU_ITEMS[$orderValue[$x]]['price'];
+                $TOTAL_PRICE += $itemPrice;
+            }
             $_SESSION['TOTAL_PRICE'] = $TOTAL_PRICE;
         }
+
         function printTotal(){
-            $TOTAL_PRICE = $_SESSION['TOTAL_PRICE'];
-            echo ("<p> TOTAL: ₱$TOTAL_PRICE </p>");
+            if (isset($_SESSION['TOTAL_PRICE'])){
+                $TOTAL_PRICE = $_SESSION['TOTAL_PRICE'];
+                echo ("<p> TOTAL: ₱$TOTAL_PRICE </p>");
+            }
         } 
+
         function getName($item, $MENU_ITEMS){
             $itemName = $MENU_ITEMS[$item]['longname'];
             return($itemName);

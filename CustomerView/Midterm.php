@@ -156,6 +156,17 @@
         "F0" => "clear_order",
     );
 
+    if (!isset($_SESSION['CURRENT_ORDER'])){
+        $_SESSION['CURRENT_ORDER'] = array();
+    } else {
+        $CURRENT_ORDER = $_SESSION['CURRENT_ORDER'];
+    }
+    if (!isset($_SESSION['TOTAL_PRICE'])){
+        $_SESSION['TOTAL_PRICE'] = 0;
+    } else {
+        $TOTAL_PRICE = $_SESSION['TOTAL_PRICE'];
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -248,15 +259,6 @@
                     );
                 }
 
-                // if ($_SERVER["REQUEST_METHOD"] == "POST"){
-                //     if (!empty($_POST[$_SESSION['FUNCTIONS']["F1"]])){
-                //         $newItem = $_POST[$_SESSION['FUNCTIONS']["F1"]];
-                //         if (array_key_exists($_SESSION['FUNCTIONS']["F1"], $_POST)){
-                //             addItem($newItem);
-                //         }
-                //     }
-                // }
-
                 if ($_SERVER["REQUEST_METHOD"] == "POST"){
                     if (empty($_POST[$_SESSION['FUNCTIONS']["F1"]])){
                         if (empty($_POST[$_SESSION['FUNCTIONS']["F2"]])){
@@ -294,6 +296,9 @@
                 function clearOrder(){
                     if(isset($_SESSION['CURRENT_ORDER'])){
                         unset($_SESSION['CURRENT_ORDER']);
+                    }
+                    if(isset($_SESSION['TOTAL_PRICE'])){
+                        unset($_SESSION['TOTAL_PRICE']);
                     }
                 }
 

@@ -1,8 +1,16 @@
 <?php 
     session_start();
-
-    $TOTAL_PRICE = $_SESSION['TOTAL_PRICE'];
-    $CURRENT_ORDER = $_SESSION['CURRENT_ORDER']
+    
+    if (!isset($_SESSION['CURRENT_ORDER'])){
+        $_SESSION['CURRENT_ORDER'] = array();
+    } else {
+        $CURRENT_ORDER = $_SESSION['CURRENT_ORDER'];
+    }
+    if (!isset($_SESSION['TOTAL_PRICE'])){
+        $_SESSION['TOTAL_PRICE'] = 0;
+    } else {
+        $TOTAL_PRICE = $_SESSION['TOTAL_PRICE'];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -36,9 +44,14 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="orderReciept.php">Cart</a>
-                            </li>
+                            <form
+                                method="post"
+                                action="orderReciept.php"
+                            >
+                                <li class="nav-item">
+                                    <input type="submit" class="nav-link" name="finish_order" value="Cart"/>
+                                </li>
+                            </form>
                             <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Take a break and have a McDonald's merienda! I'm lovin' it!</a>
                             </li>
